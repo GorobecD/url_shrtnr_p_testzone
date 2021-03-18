@@ -91,4 +91,17 @@ class LogicTest {
       logic.createNewAlias("ddd@bbb.com", "http://d.com/laaaang_url", "short");
     }).isInstanceOf(AliasAlreadyExist.class);
   }
+
+  @Test
+  void generatedAliasIsNotEmpty() {
+    // GIVEN
+    Logic logic = createLogic();
+
+    // WHEN
+    var generatedAlias = logic.createNewAlias("aaa@bbb.com", "http://g.com/loooong_url", "");
+
+    // THEN
+    assertThat(generatedAlias).isNotEmpty();
+  }
+
 }

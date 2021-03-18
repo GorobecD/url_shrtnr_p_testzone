@@ -5,6 +5,7 @@ import edu.kpi.testcourse.entities.User;
 import edu.kpi.testcourse.storage.UrlRepository;
 import edu.kpi.testcourse.storage.UrlRepository.AliasAlreadyExist;
 import edu.kpi.testcourse.storage.UserRepository;
+import java.util.Random;
 
 /**
  * Business logic of the URL shortener application.
@@ -66,8 +67,12 @@ public class Logic {
   public String createNewAlias(String email, String url, String alias) throws AliasAlreadyExist {
     String finalAlias;
     if (alias == null || alias.isEmpty()) {
-      // TODO: Generate short alias
-      throw new UnsupportedOperationException("Is not implemented yet");
+      String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+      Random rnd = new Random();
+      StringBuilder sb = new StringBuilder(5);
+        for(int i = 0; i < 5; i++)
+          sb.append(AB.charAt( rnd.nextInt(AB.length())));
+        finalAlias = sb.toString();
     } else {
       finalAlias = alias;
     }
