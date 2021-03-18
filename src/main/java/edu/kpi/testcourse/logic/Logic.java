@@ -69,10 +69,10 @@ public class Logic {
     if (alias == null || alias.isEmpty()) {
       String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
       Random rnd = new Random();
-      StringBuilder sb = new StringBuilder( 5 );
-        for( int i = 0; i < 5; i++ )
-          sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
-        finalAlias =sb.toString();
+      StringBuilder sb = new StringBuilder(5);
+        for(int i = 0; i < 5; i++)
+          sb.append(AB.charAt( rnd.nextInt(AB.length())));
+        finalAlias = sb.toString();
     } else {
       finalAlias = alias;
     }
