@@ -13,7 +13,10 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
+import java.awt.Desktop;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import javax.inject.Inject;
 
 /**
@@ -55,12 +58,18 @@ public class PublicApiController {
    * @param alias a short URL alias
    */
   @Get(value = "/r/{alias}")
-  public HttpResponse<?> redirect(String alias) {
+  public HttpResponse<?> redirect(String alias) throws URISyntaxException {
     String fullUrl = logic.findFullUrl(alias);
     if (fullUrl != null) {
-      return HttpResponse.redirect(URI.create(fullUrl));
+        return HttpResponse.redirect(new URI(fullUrl));
     } else {
       return HttpResponse.notFound();
+    }
+  }
+
+  public static class LinkIsEmpty extends Throwable {
+    public LinkIsEmpty() {
+      super("The URL is empty");
     }
   }
 }

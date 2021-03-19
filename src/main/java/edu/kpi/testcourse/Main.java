@@ -18,3 +18,4 @@ public class Main {
     Micronaut.run(Main.class, args);
   }
 }
+
