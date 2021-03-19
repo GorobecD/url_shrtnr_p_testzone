@@ -86,9 +86,7 @@ class LogicTest {
     var shortUrl = logic.createNewAlias("aaa@bbb.com", "http://g.com/loooong_url", "short");
 
     // THEN
-    assertThatThrownBy(() -> {
-      logic.createNewAlias("ddd@bbb.com", "http://d.com/laaaang_url", "short");
-    }).isInstanceOf(AliasAlreadyExist.class);
+    assertThatThrownBy(() -> logic.createNewAlias("ddd@bbb.com", "http://d.com/laaaang_url", "short")).isInstanceOf(AliasAlreadyExist.class);
   }
 
   @Test
@@ -101,6 +99,20 @@ class LogicTest {
 
     // THEN
     assertThat(generatedAlias).isNotEmpty();
+  }
+
+  @Test
+  void shouldSaveLinkAccordingToUser() {
+    // GIVEN
+    Logic logic = createLogic();
+    var user1_alias1 = logic.createNewAlias("aaa@bbb.com", "http://g.com/loooong_url", "user1_1");
+    var user1_alias2 = logic.createNewAlias("aaa@bbb.com", "http://g.com/loooong_url", "user1_2");
+    var user2_alias1 = logic.createNewAlias("zzz@yyy.com", "http://h.com/shooort_url", "user2_1");
+    // WHEN
+    logic.dataCreation();
+    // THEN
+    assertThat(logic.data.get("aaa@bbb.com").size()).isEqualTo(2);
+    assertThat(logic.data.get("zzz@yyy.com").size()).isEqualTo(1);
   }
 
 }
