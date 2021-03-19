@@ -6,7 +6,11 @@ import edu.kpi.testcourse.entities.User;
 import edu.kpi.testcourse.rest.AuthenticatedApiController;
 import edu.kpi.testcourse.storage.UrlRepository;
 import edu.kpi.testcourse.storage.UrlRepository.AliasAlreadyExist;
+import edu.kpi.testcourse.storage.UrlRepository.PermissionDenied;
 import edu.kpi.testcourse.storage.UserRepository;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
+import io.netty.handler.codec.http2.StreamBufferingEncoder.Http2ChannelClosedException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +28,8 @@ public class Logic {
   private final HashUtils hashUtils;
   public Map<String, Map<String, String>> allList = new HashMap<>();
   public Map<String, Map<String, String>> data = new HashMap<>();
+  private int hashSize = 0;
+  private int hashSize2 = 0;
 
   /**
    * Creates an instance.
@@ -128,7 +134,7 @@ public class Logic {
 
     for (Map.Entry<String, Map<String, String>> entry : fullUrl.entrySet()) {
       String key = entry.getKey();
-      Map<String, String> val = entry.getValue();    //{email:{alias:url}}
+      Map<String, String> val = entry.getValue();
       if (!answ.containsKey(key)) {
         answ.put(key, val);
       } else {
@@ -144,6 +150,22 @@ public class Logic {
       }
     }
     return data;
+  }
+
+  /**
+   * Delete URL's by alias.
+   *
+   * @return a response
+   */
+  public HttpResponse<?> deleteFunc(String email, String alias) throws PermissionDenied {
+    hashSize = data.get(email).size();
+    data.get(email).remove(alias);
+    hashSize2 = data.get(email).size();
+    if (hashSize2 < hashSize) {
+      return HttpResponse.status(HttpStatus.OK);
+    } else {
+      return HttpResponse.notFound();
+    }
   }
 
   /**

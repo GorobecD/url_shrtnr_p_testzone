@@ -115,4 +115,16 @@ class LogicTest {
     assertThat(logic.data.get("zzz@yyy.com").size()).isEqualTo(1);
   }
 
+  /*@Test
+  void shouldNotDeleteAnotherUserAlias() {
+    // GIVEN
+    Logic logic = createLogic();
+    var user1_alias1 = logic.createNewAlias("aaa@bbb.com", "https://www.amazon.com/b/?node=3952&ref_=Oct_s9_apbd_odnav_hd_bw_bzv_0&pf_rd_r=QJ1CKZN7V61T8JZM8RXY&pf_rd_p=753d54e0-e548-5702-bd6c-de0e948e86be&pf_rd_s=merchandised-search-10&pf_rd_t=BROWSE&pf_rd_i=3839", "amazon");
+    var user2_alias1 = logic.createNewAlias("zzz@yyy.com", "https://youtu.be/s3Ejdx6cIho", "GOD");
+    // WHEN
+    logic.deleteFunc("aaa@bbb.com", "amazon");
+    // THEN
+    assertThat(logic.data.get("aaa@bbb.com")).isEqualTo("{}");
+  }*/
+
 }
