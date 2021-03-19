@@ -1,10 +1,15 @@
 package edu.kpi.testcourse.logic;
 
+
 import edu.kpi.testcourse.entities.UrlAlias;
 import edu.kpi.testcourse.entities.User;
+import edu.kpi.testcourse.rest.AuthenticatedApiController;
 import edu.kpi.testcourse.storage.UrlRepository;
 import edu.kpi.testcourse.storage.UrlRepository.AliasAlreadyExist;
 import edu.kpi.testcourse.storage.UserRepository;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -17,6 +22,8 @@ public class Logic {
   private final UserRepository users;
   private final UrlRepository urls;
   private final HashUtils hashUtils;
+  public Map<String, Map<String, String>> allList = new HashMap<>();
+  public Map<String, Map<String, String>> data = new HashMap<>();
 
   /**
    * Creates an instance.
@@ -69,6 +76,8 @@ public class Logic {
    */
   public String createNewAlias(String email, String url, String alias) throws AliasAlreadyExist {
     String finalAlias;
+    Map<String, String> alUrl = new HashMap<>();
+
     if (alias == null || alias.isEmpty()) {
       String ab = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
       Random rnd = new Random();
@@ -81,6 +90,12 @@ public class Logic {
       finalAlias = alias;
     }
 
+    alUrl.put(finalAlias, url);
+    if (!allList.containsKey(email)) {
+      allList.put(email, alUrl);
+    } else {
+      allList.get(email).put(finalAlias, url);
+    }
     urls.createUrlAlias(new UrlAlias(finalAlias, url, email));
 
     return finalAlias;
@@ -100,6 +115,35 @@ public class Logic {
     }
 
     return null;
+  }
+
+  /**
+   * Get URL's data.
+   *
+   * @return a URL's data
+   */
+  public Map<String, Map<String, String>> dataCreation() {
+    Map<String, Map<String, String>> fullUrl = allList;
+    Map<String, Map<String, String>> answ = new HashMap<>();
+
+    for (Map.Entry<String, Map<String, String>> entry : fullUrl.entrySet()) {
+      String key = entry.getKey();
+      Map<String, String> val = entry.getValue();    //{email:{alias:url}}
+      if (!answ.containsKey(key)) {
+        answ.put(key, val);
+      } else {
+        answ.get(key).put(val.entrySet().toArray()[0].toString(),
+            val.entrySet().toArray()[1].toString());
+      }
+      for (Map.Entry<String, Map<String, String>> entry2 : answ.entrySet()) {
+        String dataKey = entry2.getKey();
+        Map<String, String> val2 = entry.getValue();
+        if (!data.containsKey(dataKey)) {
+          data.put(dataKey, val2);
+        }
+      }
+    }
+    return data;
   }
 
   /**
