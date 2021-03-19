@@ -61,7 +61,7 @@ public class PublicApiController {
   public HttpResponse<?> redirect(String alias) throws URISyntaxException {
     String fullUrl = logic.findFullUrl(alias);
     if (fullUrl != null) {
-        return HttpResponse.redirect(new URI(fullUrl));
+      return HttpResponse.redirect(new URI(fullUrl));
     } else {
       return HttpResponse.notFound();
     }
