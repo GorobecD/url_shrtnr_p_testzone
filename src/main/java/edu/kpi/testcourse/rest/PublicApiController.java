@@ -66,10 +66,4 @@ public class PublicApiController {
       return HttpResponse.notFound();
     }
   }
-
-  public static class LinkIsEmpty extends Throwable {
-    public LinkIsEmpty() {
-      super("The URL is empty");
-    }
-  }
 }
