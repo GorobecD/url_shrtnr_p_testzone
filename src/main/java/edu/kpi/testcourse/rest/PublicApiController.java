@@ -2,22 +2,32 @@ package edu.kpi.testcourse.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.kpi.testcourse.entities.UrlAlias;
 import edu.kpi.testcourse.logic.Logic;
 import edu.kpi.testcourse.rest.models.ErrorResponse;
+import edu.kpi.testcourse.rest.models.UrlAllResponse;
+import edu.kpi.testcourse.rest.models.UrlShortenResponse;
 import edu.kpi.testcourse.rest.models.UserSignupRequest;
+import edu.kpi.testcourse.serialization.JsonTool;
+import edu.kpi.testcourse.serialization.JsonToolJacksonImpl;
+import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.server.util.HttpHostResolver;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
-import java.awt.Desktop;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 import javax.inject.Inject;
+
 
 /**
  * API controller for all REST API endpoints accessible without authentication.
@@ -28,9 +38,12 @@ public class PublicApiController {
 
   private final Logic logic;
   private final ObjectMapper objectMapper;
+  JsonToolJacksonImpl json = new JsonToolJacksonImpl();
+  private Map<String, Map<String, String>> data = new HashMap<>();
 
   @Inject
-  public PublicApiController(Logic logic, ObjectMapper objectMapper) {
+  public PublicApiController(Logic logic, ObjectMapper objectMapper,
+      HttpHostResolver httpHostResolver) {
     this.logic = logic;
     this.objectMapper = objectMapper;
   }
@@ -65,5 +78,11 @@ public class PublicApiController {
     } else {
       return HttpResponse.notFound();
     }
+  }
+
+  @Get(value = "/urls")
+  public HttpResponse<String> showUrls(HttpRequest<?> httpRequest, Principal principal) {
+    String email = principal.getName();
+    return HttpResponse.created(json.toJson(logic.dataCreation().get(email)));
   }
 }
