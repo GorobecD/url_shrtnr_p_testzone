@@ -10,12 +10,15 @@ import edu.kpi.testcourse.rest.models.UrlShortenResponse;
 import edu.kpi.testcourse.rest.models.UserSignupRequest;
 import edu.kpi.testcourse.serialization.JsonTool;
 import edu.kpi.testcourse.serialization.JsonToolJacksonImpl;
+import edu.kpi.testcourse.storage.UrlRepository.PermissionDenied;
+import edu.kpi.testcourse.storage.UrlRepositoryFakeImpl;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.server.util.HttpHostResolver;
@@ -40,6 +43,7 @@ public class PublicApiController {
   private final ObjectMapper objectMapper;
   JsonToolJacksonImpl json = new JsonToolJacksonImpl();
   private Map<String, Map<String, String>> data = new HashMap<>();
+
 
   @Inject
   public PublicApiController(Logic logic, ObjectMapper objectMapper,
@@ -80,9 +84,29 @@ public class PublicApiController {
     }
   }
 
+
+  /**
+   * Send list as response.
+   *
+   */
   @Get(value = "/urls")
   public HttpResponse<String> showUrls(HttpRequest<?> httpRequest, Principal principal) {
     String email = principal.getName();
     return HttpResponse.created(json.toJson(logic.dataCreation().get(email)));
   }
+
+
+  /**
+   * Delete full URL by alias.
+   *
+   * @param alias a short URL alias
+   */
+  @Delete(value = "/delete/{alias}")
+  public HttpResponse<?> deleteAlias(String alias, Principal principal) throws PermissionDenied {
+
+    String email = principal.getName();
+
+    return logic.deleteFunc(email, alias);
+  }
+
 }
