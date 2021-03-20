@@ -66,6 +66,7 @@ public class AuthenticatedApiController {
       var alias = logic.createNewAlias(email, request.url(), request.alias());
       var shortenedUrl = baseUrl + "/r/"
           + alias;
+      logic.dataCreation().get(email);
       return HttpResponse.created(
         json.toJson(new UrlShortenResponse(shortenedUrl)));
     } catch (AliasAlreadyExist e) {
