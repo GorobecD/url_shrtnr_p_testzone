@@ -4,6 +4,7 @@ import edu.kpi.testcourse.entities.User;
 import edu.kpi.testcourse.storage.UrlRepository.AliasAlreadyExist;
 import edu.kpi.testcourse.storage.UrlRepositoryFakeImpl;
 import edu.kpi.testcourse.storage.UserRepositoryFakeImpl;
+import java.security.cert.TrustAnchor;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -115,16 +116,17 @@ class LogicTest {
     assertThat(logic.data.get("zzz@yyy.com").size()).isEqualTo(1);
   }
 
-  /*@Test
+  @Test
   void shouldNotDeleteAnotherUserAlias() {
     // GIVEN
     Logic logic = createLogic();
-    var user1_alias1 = logic.createNewAlias("aaa@bbb.com", "https://www.amazon.com/b/?node=3952&ref_=Oct_s9_apbd_odnav_hd_bw_bzv_0&pf_rd_r=QJ1CKZN7V61T8JZM8RXY&pf_rd_p=753d54e0-e548-5702-bd6c-de0e948e86be&pf_rd_s=merchandised-search-10&pf_rd_t=BROWSE&pf_rd_i=3839", "amazon");
+    var user1_alias1 = logic.createNewAlias("aaa@bbb.com", "https://www.amazon.com/Python-Crash-Course-2nd-Edition/dp/1593279280?ref_=Oct_s9_apbd_obs_hd_bw_b1CMa&pf_rd_r=D34V93AGCPE3PE9GRB4Z&pf_rd_p=19f1f22d-65de-5355-be40-832831e45eb5&pf_rd_s=merchandised-search-10&pf_rd_t=BROWSE&pf_rd_i=285856", "amazon");
     var user2_alias1 = logic.createNewAlias("zzz@yyy.com", "https://youtu.be/s3Ejdx6cIho", "GOD");
     // WHEN
+    logic.dataCreation();
     logic.deleteFunc("aaa@bbb.com", "amazon");
     // THEN
-    assertThat(logic.data.get("aaa@bbb.com")).isEqualTo("{}");
-  }*/
+    assertThat(logic.data.get("aaa@bbb.com").isEmpty()).isTrue();
+  }
 
 }

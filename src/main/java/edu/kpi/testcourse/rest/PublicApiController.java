@@ -102,8 +102,8 @@ public class PublicApiController {
    * @param alias a short URL alias
    */
   @Delete(value = "/delete/{alias}")
-  public HttpResponse<?> deleteAlias(String alias,
-      Principal principal) throws PermissionDenied {
+  public HttpResponse<?> deleteAlias(String alias, Principal principal) throws PermissionDenied {
+
     String email = principal.getName();
 
     return logic.deleteFunc(email, alias);

@@ -161,10 +161,10 @@ public class Logic {
     hashSize = data.get(email).size();
     data.get(email).remove(alias);
     hashSize2 = data.get(email).size();
-    if (hashSize2 < hashSize) {
-      return HttpResponse.status(HttpStatus.OK);
+    if (hashSize > hashSize2) {
+      return HttpResponse.created("Successfully_Deleted");
     } else {
-      return HttpResponse.notFound();
+      return HttpResponse.created("No_Alias_With_That_Key");
     }
   }
 
