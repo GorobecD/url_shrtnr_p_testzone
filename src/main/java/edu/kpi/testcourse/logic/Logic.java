@@ -3,14 +3,9 @@ package edu.kpi.testcourse.logic;
 
 import edu.kpi.testcourse.entities.UrlAlias;
 import edu.kpi.testcourse.entities.User;
-import edu.kpi.testcourse.rest.AuthenticatedApiController;
 import edu.kpi.testcourse.storage.UrlRepository;
 import edu.kpi.testcourse.storage.UrlRepository.AliasAlreadyExist;
-import edu.kpi.testcourse.storage.UrlRepository.PermissionDenied;
 import edu.kpi.testcourse.storage.UserRepository;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.HttpStatus;
-import io.netty.handler.codec.http2.StreamBufferingEncoder.Http2ChannelClosedException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,12 +146,28 @@ public class Logic {
   }
 
   /**
+   * Get All Aliases For User.
+   *
+   * @return Aliases by user email
+   */
+  public List<UrlAlias> getUserAliases(String email) {
+    return urls.getAllAliasesForUser(email);
+  }
+
+  /**
    * Delete URL's by alias.
    *
    * @return a response
    */
-  public String deleteUrl(String email, String alias) throws PermissionDenied {
-    return data.get(email).remove(alias);
+  public boolean deleteUrl(String email, String alias) {
+    List<UrlAlias> userAliases = urls.getAllAliasesForUser(email);
+    for (UrlAlias userAlias : userAliases) {
+      if (userAlias.alias().equals(alias)) {
+        urls.deleteUrlAlias(email, alias);
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
