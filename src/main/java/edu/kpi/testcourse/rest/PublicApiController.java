@@ -42,7 +42,6 @@ public class PublicApiController {
   private final Logic logic;
   private final ObjectMapper objectMapper;
   JsonToolJacksonImpl json = new JsonToolJacksonImpl();
-  private Map<String, Map<String, String>> data = new HashMap<>();
 
 
   @Inject
@@ -103,10 +102,12 @@ public class PublicApiController {
    */
   @Delete(value = "/delete/{alias}")
   public HttpResponse<?> deleteAlias(String alias, Principal principal) throws PermissionDenied {
-
     String email = principal.getName();
-
-    return logic.deleteFunc(email, alias);
+    if (logic.deleteUrl(email, alias) != null) {
+      return HttpResponse.created("Successfully_Deleted");
+    } else {
+      return HttpResponse.created("No_Alias_With_That_Key");
+    }
   }
 
 }

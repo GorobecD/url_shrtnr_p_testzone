@@ -28,8 +28,6 @@ public class Logic {
   private final HashUtils hashUtils;
   public Map<String, Map<String, String>> allList = new HashMap<>();
   public Map<String, Map<String, String>> data = new HashMap<>();
-  private int hashSize = 0;
-  private int hashSize2 = 0;
 
   /**
    * Creates an instance.
@@ -130,18 +128,18 @@ public class Logic {
    */
   public Map<String, Map<String, String>> dataCreation() {
     Map<String, Map<String, String>> fullUrl = allList;
-    Map<String, Map<String, String>> answ = new HashMap<>();
+    Map<String, Map<String, String>> answer = new HashMap<>();
 
     for (Map.Entry<String, Map<String, String>> entry : fullUrl.entrySet()) {
       String key = entry.getKey();
       Map<String, String> val = entry.getValue();
-      if (!answ.containsKey(key)) {
-        answ.put(key, val);
+      if (!answer.containsKey(key)) {
+        answer.put(key, val);
       } else {
-        answ.get(key).put(val.entrySet().toArray()[0].toString(),
+        answer.get(key).put(val.entrySet().toArray()[0].toString(),
             val.entrySet().toArray()[1].toString());
       }
-      for (Map.Entry<String, Map<String, String>> entry2 : answ.entrySet()) {
+      for (Map.Entry<String, Map<String, String>> entry2 : answer.entrySet()) {
         String dataKey = entry2.getKey();
         Map<String, String> val2 = entry.getValue();
         if (!data.containsKey(dataKey)) {
@@ -157,15 +155,8 @@ public class Logic {
    *
    * @return a response
    */
-  public HttpResponse<?> deleteFunc(String email, String alias) throws PermissionDenied {
-    hashSize = data.get(email).size();
-    data.get(email).remove(alias);
-    hashSize2 = data.get(email).size();
-    if (hashSize > hashSize2) {
-      return HttpResponse.created("Successfully_Deleted");
-    } else {
-      return HttpResponse.created("No_Alias_With_That_Key");
-    }
+  public String deleteUrl(String email, String alias) throws PermissionDenied {
+    return data.get(email).remove(alias);
   }
 
   /**

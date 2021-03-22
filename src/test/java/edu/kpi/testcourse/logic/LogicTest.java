@@ -124,9 +124,10 @@ class LogicTest {
     var user2_alias1 = logic.createNewAlias("zzz@yyy.com", "https://youtu.be/s3Ejdx6cIho", "GOD");
     // WHEN
     logic.dataCreation();
-    logic.deleteFunc("aaa@bbb.com", "amazon");
+    logic.deleteUrl("aaa@bbb.com", "amazon");
     // THEN
     assertThat(logic.data.get("aaa@bbb.com").isEmpty()).isTrue();
+    assertThat(logic.data.get("zzz@yyy.com").isEmpty()).isFalse();
   }
 
 }
