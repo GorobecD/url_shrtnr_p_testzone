@@ -105,11 +105,12 @@ class LogicTest {
   void shouldSaveLinkAccordingToUser() {
     // GIVEN
     Logic logic = createLogic();
-
-    // WHEN
     var user1_alias1 = logic.createNewAlias("aaa@bbb.com", "http://g.com/loooong_url", "user1_1");
     var user1_alias2 = logic.createNewAlias("aaa@bbb.com", "http://g.com/loooong_url", "user1_2");
     var user2_alias1 = logic.createNewAlias("zzz@yyy.com", "http://h.com/shooort_url", "user2_1");
+
+    // WHEN
+    logic.dataCreation();
 
     // THEN
     assertThat(logic.data.get("aaa@bbb.com").size()).isEqualTo(2);
