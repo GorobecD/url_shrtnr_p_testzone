@@ -134,7 +134,7 @@ public class Logic {
         answer.put(email, aliasUrl);
       } else {
         answer.get(email).put(aliasUrl.entrySet().toArray()[0].toString(),
-          aliasUrl.entrySet().toArray()[1].toString());
+            aliasUrl.entrySet().toArray()[1].toString());
       }
       for (Map.Entry<String, Map<String, String>> entry2 : answer.entrySet()) {
         String emailData = entry2.getKey();
