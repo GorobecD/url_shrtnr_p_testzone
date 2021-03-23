@@ -113,8 +113,8 @@ class LogicTest {
     logic.dataCreation();
 
     // THEN
-    assertThat(logic.data.get("aaa@bbb.com").size()).isEqualTo(2);
-    assertThat(logic.data.get("zzz@yyy.com").size()).isEqualTo(1);
+    assertThat(logic.allList.get("aaa@bbb.com").size()).isEqualTo(2);
+    assertThat(logic.allList.get("zzz@yyy.com").size()).isEqualTo(1);
   }
 
   @Test

@@ -22,7 +22,6 @@ public class Logic {
   private final UrlRepository urls;
   private final HashUtils hashUtils;
   public Map<String, Map<String, String>> allList = new HashMap<>();
-  public Map<String, Map<String, String>> data = new HashMap<>();
 
   /**
    * Creates an instance.
@@ -122,6 +121,7 @@ public class Logic {
    * @return a URL's data
    */
   public Map<String, Map<String, String>> dataCreation() {
+    Map<String, Map<String, String>> data = new HashMap<>();
     Map<String, Map<String, String>> fullUrl = allList;
     Map<String, Map<String, String>> answer = new HashMap<>();
 
