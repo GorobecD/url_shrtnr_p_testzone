@@ -117,9 +117,9 @@ public class Logic {
 
   /**
    * Get URL's data.
-   *
    * The first String parameter of Map contains a user email
-   * and the second parameter contains one more Map with Strings alias and url.
+   * and the second parameter contains one more Map with Strings alias and url
+   *
    * @return {email:{alias:url}}
    */
   public Map<String, Map<String, String>> dataCreation() {
@@ -134,7 +134,7 @@ public class Logic {
         answer.put(key, value);
       } else {
         answer.get(key).put(value.entrySet().toArray()[0].toString(),
-          value.entrySet().toArray()[1].toString());
+            value.entrySet().toArray()[1].toString());
       }
       for (Map.Entry<String, Map<String, String>> entry2 : answer.entrySet()) {
         String dataKey = entry2.getKey();
