@@ -21,7 +21,7 @@ public class Logic {
   private final UserRepository users;
   private final UrlRepository urls;
   private final HashUtils hashUtils;
-  public Map<String, Map<String, String>> allList = new HashMap<>();
+  public Map<String, Map<String, String>> allMap = new HashMap<>();
 
   /**
    * Creates an instance.
@@ -74,25 +74,25 @@ public class Logic {
    */
   public String createNewAlias(String email, String url, String alias) throws AliasAlreadyExist {
     String finalAlias;
-    Map<String, String> alUrl = new HashMap<>();
+    Map<String, String> allUrl = new HashMap<>();
 
     if (alias == null || alias.isEmpty()) {
-      String ab = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-      Random rnd = new Random();
-      StringBuilder sb = new StringBuilder(5);
+      String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+      Random random = new Random();
+      StringBuilder stringBuilder = new StringBuilder(5);
       for (int i = 0; i < 5; i++) {
-        sb.append(ab.charAt(rnd.nextInt(ab.length())));
+        stringBuilder.append(alphabet.charAt(random.nextInt(alphabet.length())));
       }
-      finalAlias = sb.toString();
+      finalAlias = stringBuilder.toString();
     } else {
       finalAlias = alias;
     }
 
-    alUrl.put(finalAlias, url);
-    if (!allList.containsKey(email)) {
-      allList.put(email, alUrl);
+    allUrl.put(finalAlias, url);
+    if (!allMap.containsKey(email)) {
+      allMap.put(email, allUrl);
     } else {
-      allList.get(email).put(finalAlias, url);
+      allMap.get(email).put(finalAlias, url);
     }
     urls.createUrlAlias(new UrlAlias(finalAlias, url, email));
 
@@ -118,27 +118,29 @@ public class Logic {
   /**
    * Get URL's data.
    *
-   * @return a URL's data
+   * The first String parameter of Map contains a user email
+   * and the second parameter contains one more Map with Strings alias and url.
+   * @return {email:{alias:url}}
    */
   public Map<String, Map<String, String>> dataCreation() {
     Map<String, Map<String, String>> data = new HashMap<>();
-    Map<String, Map<String, String>> fullUrl = allList;
+    Map<String, Map<String, String>> fullUrl = allMap;
     Map<String, Map<String, String>> answer = new HashMap<>();
 
     for (Map.Entry<String, Map<String, String>> entry : fullUrl.entrySet()) {
       String key = entry.getKey();
-      Map<String, String> val = entry.getValue();
+      Map<String, String> value = entry.getValue();
       if (!answer.containsKey(key)) {
-        answer.put(key, val);
+        answer.put(key, value);
       } else {
-        answer.get(key).put(val.entrySet().toArray()[0].toString(),
-            val.entrySet().toArray()[1].toString());
+        answer.get(key).put(value.entrySet().toArray()[0].toString(),
+          value.entrySet().toArray()[1].toString());
       }
       for (Map.Entry<String, Map<String, String>> entry2 : answer.entrySet()) {
         String dataKey = entry2.getKey();
-        Map<String, String> val2 = entry.getValue();
+        Map<String, String> value2 = entry.getValue();
         if (!data.containsKey(dataKey)) {
-          data.put(dataKey, val2);
+          data.put(dataKey, value2);
         }
       }
     }
@@ -148,6 +150,7 @@ public class Logic {
   /**
    * Get All Aliases For User.
    *
+   * @param email an email of a user that we get
    * @return Aliases by user email
    */
   public List<UrlAlias> getUserAliases(String email) {
@@ -157,6 +160,8 @@ public class Logic {
   /**
    * Delete URL's by alias.
    *
+   * @param email an email of a user whose URL we delete
+   * @param alias a short URL alias that we delete
    * @return a response
    */
   public boolean deleteUrl(String email, String alias) {
