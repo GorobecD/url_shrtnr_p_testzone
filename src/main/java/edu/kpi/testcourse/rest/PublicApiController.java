@@ -5,18 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.kpi.testcourse.entities.UrlAlias;
 import edu.kpi.testcourse.logic.Logic;
 import edu.kpi.testcourse.rest.models.ErrorResponse;
-import edu.kpi.testcourse.rest.models.UrlAllResponse;
-import edu.kpi.testcourse.rest.models.UrlShortenResponse;
 import edu.kpi.testcourse.rest.models.UserSignupRequest;
-import edu.kpi.testcourse.serialization.JsonTool;
 import edu.kpi.testcourse.serialization.JsonToolJacksonImpl;
 import edu.kpi.testcourse.storage.UrlRepository.PermissionDenied;
-import edu.kpi.testcourse.storage.UrlRepositoryFakeImpl;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
@@ -27,8 +22,7 @@ import io.micronaut.security.rules.SecurityRule;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import javax.inject.Inject;
 
 
@@ -42,7 +36,6 @@ public class PublicApiController {
   private final Logic logic;
   private final ObjectMapper objectMapper;
   JsonToolJacksonImpl json = new JsonToolJacksonImpl();
-  private Map<String, Map<String, String>> data = new HashMap<>();
 
 
   @Inject
@@ -92,7 +85,8 @@ public class PublicApiController {
   @Get(value = "/urls")
   public HttpResponse<String> showUrls(HttpRequest<?> httpRequest, Principal principal) {
     String email = principal.getName();
-    return HttpResponse.created(json.toJson(logic.dataCreation().get(email)));
+    List<UrlAlias>  userAliases = logic.getUserAliases(email);
+    return HttpResponse.created(json.toJson(userAliases));
   }
 
 
@@ -103,10 +97,13 @@ public class PublicApiController {
    */
   @Delete(value = "/delete/{alias}")
   public HttpResponse<?> deleteAlias(String alias, Principal principal) throws PermissionDenied {
-
     String email = principal.getName();
-
-    return logic.deleteFunc(email, alias);
+    boolean deleteCheck = logic.deleteUrl(email, alias);
+    if (deleteCheck) {
+      return HttpResponse.created("Successfully_Deleted");
+    } else {
+      return HttpResponse.created("No_Alias_With_That_Key");
+    }
   }
 
 }
