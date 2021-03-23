@@ -128,19 +128,19 @@ public class Logic {
     Map<String, Map<String, String>> answer = new HashMap<>();
 
     for (Map.Entry<String, Map<String, String>> entry : fullUrl.entrySet()) {
-      String key = entry.getKey();
-      Map<String, String> value = entry.getValue();
-      if (!answer.containsKey(key)) {
-        answer.put(key, value);
+      String email = entry.getKey();
+      Map<String, String> aliasUrl = entry.getValue();
+      if (!answer.containsKey(email)) {
+        answer.put(email, aliasUrl);
       } else {
-        answer.get(key).put(value.entrySet().toArray()[0].toString(),
-            value.entrySet().toArray()[1].toString());
+        answer.get(email).put(aliasUrl.entrySet().toArray()[0].toString(),
+          aliasUrl.entrySet().toArray()[1].toString());
       }
       for (Map.Entry<String, Map<String, String>> entry2 : answer.entrySet()) {
-        String dataKey = entry2.getKey();
-        Map<String, String> value2 = entry.getValue();
-        if (!data.containsKey(dataKey)) {
-          data.put(dataKey, value2);
+        String emailData = entry2.getKey();
+        Map<String, String> aliasUrlData = entry.getValue();
+        if (!data.containsKey(emailData)) {
+          data.put(emailData, aliasUrlData);
         }
       }
     }
